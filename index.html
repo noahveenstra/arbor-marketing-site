@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07121f">
+  <title>Arbor — Keep the thought. Find it later.</title>
+  <meta name="description" content="Capture a thought without sorting it first. Find it again later from the words and context you remember.">
+  <link rel="canonical" href="https://usearbor.app/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://usearbor.app/">
+  <meta property="og:title" content="Arbor — Keep the thought. Find it later.">
+  <meta property="og:description" content="Capture a thought without sorting it first. Find it again later from the words and context you remember.">
+  <meta property="og:image" content="https://usearbor.app/highlands-painted-hero-v2.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Arbor — Keep the thought. Find it later.">
+  <meta name="twitter:description" content="Capture a thought without sorting it first. Find it again later from the words and context you remember.">
+  <meta name="twitter:image" content="https://usearbor.app/highlands-painted-hero-v2.webp">
+  <link rel="preload" href="/vendor/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts.css?v=geist-20261118-a">
+  <link rel="preload" href="/mountain-approach.webp" as="image">
+  <link rel="preload" href="/deep-archive.webp" as="image">
+  <style>
+    :root {
+      color-scheme: dark;
+      --night: #07121f;
+      --world-blue: #0d2c43;
+      --white: #f7f8f8;
+      --soft-white: rgba(247,248,248,.88);
+      --sans: "Geist",system-ui,sans-serif;
+      --serif: "Geist Serif",ui-serif,"New York",Georgia,serif;
+      --page-width: 1320px;
+    }
+    *,*::before,*::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; background: var(--world-blue); }
+    body { margin: 0; overflow-x: clip; color: var(--white); background: var(--world-blue); font-family: var(--sans); font-synthesis: none; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    a { color: inherit; }
+    .wrap { width: min(var(--page-width),calc(100% - 72px)); margin-inline: auto; }
+    .skip-link { position: fixed; z-index: 60; top: 12px; left: 12px; padding: 12px 16px; border-radius: 9px; color: var(--night); background: #fff; transform: translateY(-160%); }
+    .skip-link:focus { transform: translateY(0); }
+    .site-header { position: fixed; z-index: 50; inset: 0 0 auto; height: calc(84px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); background: linear-gradient(180deg,rgba(5,14,24,.58),rgba(5,14,24,.22) 70%,transparent); }
+    .topbar { height: 84px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.26); }
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; }
+    .brand img { display: block; width: 29px; height: 29px; filter: brightness(0) invert(1); }
+    .brand span { font: 560 24px/1 var(--serif); letter-spacing: -.035em; }
+    .nav-links { display: flex; align-items: center; gap: clamp(20px,3vw,42px); }
+    .nav-links a { color: rgba(255,255,255,.9); font-size: 14px; text-decoration: none; transition: color .18s ease,background-color .18s ease; }
+    .nav-links a:hover,.nav-links a:focus-visible { color: #fff; }
+    .nav-links .nav-cta { padding: 11px 17px; border: 1px solid rgba(255,255,255,.65); border-radius: 999px; color: #fff; background: rgba(8,24,40,.22); }
+    .nav-links .nav-cta:hover,.nav-links .nav-cta:focus-visible { color: var(--night); background: #fff; }
+    a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+
+    main { position: relative; z-index: 1; }
+    .scenic-stage { position: fixed; z-index: 0; inset: 0; overflow: hidden; background: var(--world-blue); pointer-events: none; }
+    .scene-frame { position: absolute; top: 7svh; right: 0; left: 0; height: 86svh; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom,transparent 0%,#000 10%,#000 90%,transparent 100%); mask-image: linear-gradient(to bottom,transparent 0%,#000 10%,#000 90%,transparent 100%); }
+    .scene-fallback,.scene-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .scene-fallback { display: block; object-fit: cover; opacity: 0; transform: scale(1.035); animation: painted-drift 26s ease-in-out infinite alternate; will-change: opacity,transform; }
+    .scene-fallback[data-scene="0"] { opacity: 1; }
+    .scene-canvas { opacity: 0; transition: opacity .65s ease; }
+    .scenic-stage.webgl-ready .scene-fallback { opacity: 0 !important; }
+    .scenic-stage.webgl-ready .scene-canvas { opacity: 1; }
+    .scenic-stage::after { position: absolute; inset: 0; background: linear-gradient(90deg,rgba(4,20,34,.38) 0%,rgba(4,20,34,.2) 34%,rgba(4,20,34,.04) 72%,transparent),linear-gradient(0deg,rgba(5,23,36,.42),transparent 36%,rgba(5,23,36,.12)); content: ""; pointer-events: none; }
+    @keyframes painted-drift { from { transform: scale(1.035) translate3d(-.18%,.12%,0); } to { transform: scale(1.055) translate3d(.18%,-.12%,0); } }
+
+    .hero-experience { position: relative; height: max(760px,100svh); min-height: 760px; background: transparent; }
+    .hero { position: relative; z-index: 2; width: min(var(--page-width),calc(100% - 72px)); min-height: 100%; display: flex; align-items: center; margin: 0 auto; padding: 120px 0 80px; }
+    .hero-copy { max-width: 800px; }
+    .hero h1 { max-width: 760px; margin: 0; color: #fff; font: 500 clamp(54px,7vw,94px)/.98 var(--serif); letter-spacing: -.06em; text-wrap: balance; text-shadow: 0 2px 20px rgba(4,15,27,.24); }
+    .hero-description { max-width: 610px; margin: 23px 0 0; color: rgba(255,255,255,.93); font-size: clamp(17px,1.45vw,20px); line-height: 1.62; letter-spacing: -.014em; text-shadow: 0 1px 14px rgba(4,15,27,.28); }
+    .button { min-height: 52px; display: inline-flex; align-items: center; justify-content: center; margin-top: 29px; padding: 0 21px; border: 1px solid rgba(255,255,255,.72); border-radius: 999px; color: #fff; background: rgba(5,24,41,.18); font-size: 14px; font-weight: 550; text-decoration: none; transition: color .2s ease,background-color .2s ease,border-color .2s ease; }
+    .button:hover,.button:focus-visible { color: var(--night); border-color: #fff; background: #fff; }
+
+    .world-section { position: relative; color: var(--white); background: transparent; }
+    .world-section--approach,.world-section--archive { min-height: 200svh; }
+    .story-beat { position: relative; z-index: 1; min-height: 100svh; display: flex; align-items: center; padding: 122px 0 88px; }
+    .story-beat .wrap { display: flex; align-items: center; }
+    .story-copy { width: min(580px,51vw); opacity: 1; transform: none; }
+    .has-js .story-copy { opacity: 0; transform: translateY(20px); transition: opacity .65s ease,transform .75s cubic-bezier(.2,.8,.2,1); }
+    .has-js .story-beat.is-visible .story-copy { opacity: 1; transform: translateY(0); }
+    .story-label { margin: 0 0 18px; color: rgba(255,255,255,.82); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+    .story-copy h2 { max-width: 640px; margin: 0 0 19px; color: #fff; font: 500 clamp(42px,5.5vw,72px)/1 var(--serif); letter-spacing: -.055em; text-wrap: balance; text-shadow: 0 2px 18px rgba(1,8,14,.32); }
+    .story-copy p:not(.story-label) { max-width: 535px; margin: 0; color: rgba(255,255,255,.92); font-size: clamp(17px,1.45vw,19px); line-height: 1.7; letter-spacing: -.012em; text-shadow: 0 1px 15px rgba(1,8,14,.35); }
+    .story-copy .privacy-detail { margin-top: 17px !important; color: rgba(255,255,255,.84) !important; font-size: 15px !important; line-height: 1.58 !important; }
+    .story-beat--cta { min-height: 100svh; padding-bottom: 122px; }
+    .story-beat--cta .story-copy { width: min(620px,52vw); }
+    .story-beat--cta .story-copy h2 { font-size: clamp(48px,6.15vw,82px); }
+    .story-beat--cta .button { margin-top: 28px; }
+    .site-footer { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-top: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.74); font-size: 12px; }
+    .site-footer a { color: rgba(255,255,255,.9); text-decoration: none; }
+    .site-footer a:hover,.site-footer a:focus-visible { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+    .footer-brand { display: inline-flex; align-items: center; gap: 8px; color: #fff !important; font-weight: 600; }
+    .footer-brand img { width: 19px; height: 19px; filter: brightness(0) invert(1); }
+
+    @media(max-width:800px) {
+      .wrap,.hero { width: calc(100% - 48px); }
+      .site-header { height: calc(74px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); }
+      .topbar { height: 74px; }
+      .brand img { width: 27px; height: 27px; }
+      .brand span { font-size: 23px; }
+      .nav-links { gap: 20px; }
+      .nav-links a { font-size: 12px; }
+      .nav-links .nav-cta { padding: 10px 13px; }
+      .hero-experience { height: max(790px,100svh); min-height: 790px; }
+      .hero h1 { max-width: 720px; font-size: clamp(48px,8.5vw,72px); }
+      .hero-description { max-width: 590px; font-size: 17px; }
+      .story-copy { width: min(560px,58vw); }
+      .story-copy h2 { font-size: clamp(42px,6.6vw,62px); }
+      .story-beat--cta .story-copy { width: min(650px,64vw); }
+      .story-beat--cta .story-copy h2 { font-size: clamp(48px,7vw,72px); }
+    }
+    @media(max-width:560px) {
+      .wrap,.hero { width: calc(100% - 36px); }
+      .site-header { height: calc(68px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); }
+      .topbar { height: 68px; }
+      .brand { gap: 7px; }
+      .brand img { width: 24px; height: 24px; }
+      .brand span { font-size: 21px; }
+      .nav-links { gap: 0; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .nav-links .nav-cta { padding: 9px 12px; font-size: 12px; }
+      .scene-frame { top: 8svh; height: 82svh; }
+      .hero-experience { height: max(790px,100svh); min-height: 790px; }
+      .hero { align-items: flex-end; padding-top: 110px; padding-bottom: 13svh; text-align: left; }
+      .hero-copy { max-width: 450px; }
+      .hero h1 { max-width: 410px; font-size: clamp(46px,12vw,62px); line-height: 1; }
+      .hero-description { max-width: 410px; margin-top: 18px; font-size: 16px; line-height: 1.58; }
+      .button { min-height: 49px; margin-top: 23px; padding-inline: 18px; font-size: 13px; }
+      .world-section--approach,.world-section--archive { min-height: 200svh; }
+      .story-beat { align-items: flex-end; padding: 105px 0 12svh; }
+      .story-beat .wrap { align-items: flex-end; }
+      .story-copy,.story-beat--cta .story-copy { width: 100%; }
+      .story-label { margin-bottom: 15px; font-size: 11px; }
+      .story-copy h2 { max-width: 510px; margin-bottom: 15px; font-size: clamp(42px,10.6vw,58px); }
+      .story-copy p:not(.story-label) { max-width: 500px; font-size: 16px; line-height: 1.62; }
+      .story-copy .privacy-detail { margin-top: 13px !important; font-size: 14px !important; }
+      .story-beat--cta { padding-bottom: 112px; }
+      .story-beat--cta .story-copy h2 { font-size: clamp(43px,11vw,64px); }
+      .site-footer { min-height: 76px; flex-wrap: wrap; padding: 13px 0; font-size: 11px; }
+    }
+    @media(max-width:380px) {
+      .wrap,.hero { width: calc(100% - 32px); }
+      .nav-links .nav-cta { padding-inline: 10px; }
+      .hero h1 { font-size: 44px; }
+      .story-copy h2 { font-size: 40px; }
+      .story-beat--cta .story-copy h2 { font-size: 42px; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      html { scroll-behavior: auto; }
+      *,*::before,*::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .scene-fallback { animation: none; }
+      .has-js .story-copy { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap topbar">
+      <a class="brand" href="#top" aria-label="Arbor home"><img src="/arbor-mark.svg" alt=""><span>arbor</span></a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#how">The trail</a><a href="#privacy">Privacy</a><a class="nav-cta" href="https://notes.usearbor.app/">Open Arbor</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="scenic-stage" aria-hidden="true">
+    <div class="scene-frame">
+      <img class="scene-fallback" data-scene="0" src="/highlands-painted-hero-v2.webp" alt="" fetchpriority="high" decoding="async">
+      <img class="scene-fallback" data-scene="1" src="/mountain-approach.webp" alt="" decoding="async">
+      <img class="scene-fallback" data-scene="2" src="/deep-archive.webp" alt="" decoding="async">
+      <canvas class="scene-canvas"></canvas>
+    </div>
+  </div>
+
+  <main id="main">
+    <section class="hero-experience" id="top" aria-labelledby="hero-title">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="story-label">A quieter way to keep your thoughts</p>
+          <h1 id="hero-title">Leave a thought for later.</h1>
+          <p class="hero-description">Capture it now. Find it again when you remember what matters.</p>
+          <a class="button" href="#how">See how Arbor works</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="world-section world-section--approach" id="how" aria-label="Capture and rediscover your thoughts">
+      <article class="story-beat" aria-labelledby="capture-title">
+        <div class="wrap"><div class="story-copy">
+          <p class="story-label">Capture</p>
+          <h2 id="capture-title">Catch the thought before it slips away.</h2>
+          <p>Arbor gives every half-formed thought a place to land. Write it down and move on. No folders, tags, or sorting ritual to slow you down.</p>
+        </div></div>
+      </article>
+      <article class="story-beat" aria-labelledby="recall-title">
+        <div class="wrap"><div class="story-copy">
+          <p class="story-label">Recall</p>
+          <h2 id="recall-title">Find it from a fragment.</h2>
+          <p>Search a phrase, a subject, or a detail. Arbor brings the note back when you remember only a piece of the moment—not its title or where you filed it.</p>
+        </div></div>
+      </article>
+    </section>
+
+    <section class="world-section world-section--archive" id="privacy" aria-label="Privacy and getting started">
+      <article class="story-beat" aria-labelledby="privacy-title">
+        <div class="wrap"><div class="story-copy">
+          <p class="story-label">Private by design</p>
+          <h2 id="privacy-title">Your archive is yours.</h2>
+          <p>Arbor searches on your device and never sends note text to a third-party AI service. Notes sync through your private iCloud database.</p>
+          <p class="privacy-detail">iCloud’s standard data protection encrypts notes in transit and on Apple’s servers; Apple holds the keys. This browser also keeps up to 30 recent note bodies and unsaved drafts as local plaintext, removed when you sign out.</p>
+        </div></div>
+      </article>
+      <article class="story-beat story-beat--cta" aria-labelledby="cta-title">
+        <div class="wrap"><div class="story-copy">
+          <p class="story-label">Let the archive remember</p>
+          <h2 id="cta-title">Build your mountain. Stop trying to remember what’s inside.</h2>
+          <p>Capture what matters now. When the thought comes back later, find your way to it from a fragment.</p>
+          <a class="button" href="https://notes.usearbor.app/">Start building your mountain</a>
+        </div></div>
+      </article>
+      <footer class="site-footer wrap">
+        <a class="footer-brand" href="#top" aria-label="Arbor home"><img src="/arbor-mark.svg" alt=""><span>arbor</span></a>
+        <span>In development · iPhone first</span>
+        <a href="#privacy">Privacy details</a>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    document.documentElement.classList.add('has-js');
+
+    const beats = document.querySelectorAll('.story-beat');
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => entry.target.classList.toggle('is-visible', entry.isIntersecting));
+    }, { threshold: .3 });
+    beats.forEach(beat => revealObserver.observe(beat));
+
+    const stage = document.querySelector('.scenic-stage');
+    const frame = document.querySelector('.scene-frame');
+    const canvas = document.querySelector('.scene-canvas');
+    const fallbackImages = Array.from(document.querySelectorAll('.scene-fallback'));
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+    function smoothstep(value) {
+      const t = clamp(value, 0, 1);
+      return t * t * (3 - 2 * t);
+    }
+
+    const heroSection = document.querySelector('.hero-experience');
+    const approachSection = document.querySelector('.world-section--approach');
+    const archiveSection = document.querySelector('.world-section--archive');
+    let scrollFrame = 0;
+
+    function updateSceneBlend() {
+      scrollFrame = 0;
+      const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      const span = Math.min(window.innerHeight * .72, 720);
+      const firstBoundary = approachSection.offsetTop;
+      const secondBoundary = archiveSection.offsetTop;
+      const firstBlend = smoothstep((scrollY - (firstBoundary - span / 2)) / span);
+      const secondBlend = smoothstep((scrollY - (secondBoundary - span / 2)) / span);
+      const weights = [
+        1 - firstBlend,
+        firstBlend * (1 - secondBlend),
+        secondBlend
+      ];
+      const total = weights[0] + weights[1] + weights[2] || 1;
+      for (let index = 0; index < fallbackImages.length; index++) {
+        fallbackImages[index].style.opacity = String(weights[index] / total);
+      }
+      return weights.map(weight => weight / total);
+    }
+
+    const motionEnabled = !reduceMotion;
+    let gl = null;
+    let renderFrame = 0;
+    let latestWeights = updateSceneBlend();
+
+    function startSceneRenderer() {
+      if (!motionEnabled || !canvas || !frame || fallbackImages.some(image => !image.complete || !image.naturalWidth)) return;
+
+      gl = canvas.getContext('webgl', {
+        alpha: false,
+        antialias: false,
+        depth: false,
+        stencil: false,
+        powerPreference: 'low-power'
+      });
+      if (!gl) return;
+
+      const vertexSource = 'attribute vec2 a_position; varying vec2 v_uv; void main(){v_uv=a_position*.5+.5;gl_Position=vec4(a_position,0.0,1.0);}';
+      const fragmentSource = [
+        'precision mediump float;',
+        'varying vec2 v_uv;',
+        'uniform sampler2D u_scene0; uniform sampler2D u_scene1; uniform sampler2D u_scene2;',
+        'uniform vec3 u_weights;',
+        'uniform vec2 u_scale0; uniform vec2 u_scale1; uniform vec2 u_scale2;',
+        'uniform vec2 u_offset0; uniform vec2 u_offset1; uniform vec2 u_offset2;',
+        'uniform vec2 u_pointer; uniform float u_pointerInside; uniform float u_time; uniform float u_aspect;',
+        'void main(){',
+        'vec2 p=vec2(v_uv.x,1.0-v_uv.y);',
+        'float riverLine=.82-.14*p.x;',
+        'float river=exp(-pow((p.y-riverLine)*21.0,2.0))*smoothstep(.55,.73,p.y);',
+        'float grass=smoothstep(.57,.69,p.y)*(1.0-.82*river);',
+        'float clouds=1.0-smoothstep(.36,.51,p.y);',
+        'float notes=smoothstep(.57,.68,p.x)*smoothstep(.66,.76,p.y)*(1.0-smoothstep(.93,.99,p.y));',
+        'float highlandWeight=u_weights.x+u_weights.y;',
+        'vec2 ambient=vec2(',
+        'sin(u_time*.12+p.y*6.0)*.0018*clouds+sin(u_time*1.05+p.x*23.0+p.y*11.0)*.0013*grass+sin(u_time*.8+p.x*29.0)*.0011*notes,',
+        'sin(u_time*1.15+p.x*35.0+p.y*21.0)*.0018*river',
+        ');',
+        'vec2 delta=vec2((p.x-u_pointer.x)*u_aspect,p.y-u_pointer.y);',
+        'float influence=exp(-dot(delta,delta)*92.0)*u_pointerInside;',
+        'vec2 away=normalize(delta+vec2(.00001,.00001));',
+        'float response=(.0025*clouds+.0037*grass+.0044*river+.0046*notes)*highlandWeight;',
+        'vec2 pointerShift=away*influence*response;',
+        'vec2 sampleUv=v_uv+vec2(ambient.x+pointerShift.x,-ambient.y-pointerShift.y);',
+        'vec2 uv0=clamp(u_offset0+sampleUv*u_scale0,vec2(0.0),vec2(1.0));',
+        'vec2 uv1=clamp(u_offset1+sampleUv*u_scale1,vec2(0.0),vec2(1.0));',
+        'vec2 uv2=clamp(u_offset2+sampleUv*u_scale2,vec2(0.0),vec2(1.0));',
+        'vec3 color=texture2D(u_scene0,uv0).rgb*u_weights.x+texture2D(u_scene1,uv1).rgb*u_weights.y+texture2D(u_scene2,uv2).rgb*u_weights.z;',
+        'float lantern=exp(-dot(vec2((p.x-.72)*u_aspect,p.y-.57),vec2((p.x-.72)*u_aspect,p.y-.57))*540.0);',
+        'color+=vec3(.10,.055,.018)*lantern*(.025+.012*sin(u_time*2.1))*u_weights.z;',
+        'gl_FragColor=vec4(color,1.0);',
+        '}'
+      ].join('\n');
+
+      function compileShader(type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          gl.deleteShader(shader);
+          return null;
+        }
+        return shader;
+      }
+
+      const vertex = compileShader(gl.VERTEX_SHADER, vertexSource);
+      const fragment = compileShader(gl.FRAGMENT_SHADER, fragmentSource);
+      if (!vertex || !fragment) return;
+
+      const program = gl.createProgram();
+      gl.attachShader(program, vertex);
+      gl.attachShader(program, fragment);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+      gl.useProgram(program);
+
+      const positions = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, positions);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+      const position = gl.getAttribLocation(program, 'a_position');
+      gl.enableVertexAttribArray(position);
+      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+      const textureNames = ['u_scene0','u_scene1','u_scene2'];
+      const scaleNames = ['u_scale0','u_scale1','u_scale2'];
+      const offsetNames = ['u_offset0','u_offset1','u_offset2'];
+      const textures = [];
+      fallbackImages.forEach((image, index) => {
+        const texture = gl.createTexture();
+        gl.activeTexture(gl.TEXTURE0 + index);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        gl.uniform1i(gl.getUniformLocation(program, textureNames[index]), index);
+        textures.push(texture);
+      });
+
+      const weightsLocation = gl.getUniformLocation(program, 'u_weights');
+      const pointerLocation = gl.getUniformLocation(program, 'u_pointer');
+      const pointerInsideLocation = gl.getUniformLocation(program, 'u_pointerInside');
+      const timeLocation = gl.getUniformLocation(program, 'u_time');
+      const aspectLocation = gl.getUniformLocation(program, 'u_aspect');
+      const scaleLocations = scaleNames.map(name => gl.getUniformLocation(program, name));
+      const offsetLocations = offsetNames.map(name => gl.getUniformLocation(program, name));
+      let frameRect;
+      let pointerX = -2;
+      let pointerY = -2;
+      let targetPointerX = -2;
+      let targetPointerY = -2;
+      let pointerInside = 0;
+      let targetPointerInside = 0;
+      let lastDraw = 0;
+
+      function updateCrop() {
+        frameRect = frame.getBoundingClientRect();
+        const width = Math.max(1, Math.round(frameRect.width));
+        const height = Math.max(1, Math.round(frameRect.height));
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+        canvas.width = Math.max(1, Math.round(width * dpr));
+        canvas.height = Math.max(1, Math.round(height * dpr));
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        const aspect = width / height;
+        gl.uniform1f(aspectLocation, aspect);
+        fallbackImages.forEach((image, index) => {
+          const imageAspect = image.naturalWidth / image.naturalHeight;
+          let scaleX = 1, scaleY = 1, offsetX = 0, offsetY = 0;
+          if (aspect < imageAspect) {
+            scaleX = aspect / imageAspect;
+            offsetX = (1 - scaleX) * .5;
+          } else {
+            scaleY = imageAspect / aspect;
+            offsetY = (1 - scaleY) * .5;
+          }
+          gl.uniform2f(scaleLocations[index], scaleX, scaleY);
+          gl.uniform2f(offsetLocations[index], offsetX, offsetY);
+        });
+      }
+
+      function render(now) {
+        renderFrame = 0;
+        if (document.hidden) return;
+        if (now - lastDraw < 34) {
+          renderFrame = requestAnimationFrame(render);
+          return;
+        }
+        lastDraw = now;
+        pointerX += (targetPointerX - pointerX) * .2;
+        pointerY += (targetPointerY - pointerY) * .2;
+        pointerInside += (targetPointerInside - pointerInside) * .16;
+        gl.uniform3f(weightsLocation, latestWeights[0], latestWeights[1], latestWeights[2]);
+        gl.uniform2f(pointerLocation, pointerX, pointerY);
+        gl.uniform1f(pointerInsideLocation, pointerInside);
+        gl.uniform1f(timeLocation, now * .001);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        renderFrame = requestAnimationFrame(render);
+      }
+
+      function ensureRendering() {
+        if (!renderFrame && !document.hidden) renderFrame = requestAnimationFrame(render);
+      }
+
+      function updatePointer(event) {
+        if (!frameRect) return;
+        const inside = event.clientX >= frameRect.left && event.clientX <= frameRect.right && event.clientY >= frameRect.top && event.clientY <= frameRect.bottom && event.pointerType !== 'touch';
+        if (inside) {
+          targetPointerX = (event.clientX - frameRect.left) / frameRect.width;
+          targetPointerY = (event.clientY - frameRect.top) / frameRect.height;
+          targetPointerInside = 1;
+        } else {
+          targetPointerInside = 0;
+        }
+        ensureRendering();
+      }
+
+      updateCrop();
+      gl.uniform3f(weightsLocation, latestWeights[0], latestWeights[1], latestWeights[2]);
+      gl.uniform2f(pointerLocation, pointerX, pointerY);
+      gl.uniform1f(pointerInsideLocation, pointerInside);
+      gl.uniform1f(timeLocation, 0);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      stage.classList.add('webgl-ready');
+      window.addEventListener('resize', updateCrop, { passive: true });
+      window.addEventListener('pointermove', updatePointer, { passive: true });
+      window.addEventListener('pointerleave', () => { targetPointerInside = 0; ensureRendering(); });
+      document.addEventListener('visibilitychange', ensureRendering);
+      ensureRendering();
+    }
+
+    function beginSceneRenderer() {
+      if (!motionEnabled) return;
+      if (fallbackImages.every(image => image.complete && image.naturalWidth)) {
+        startSceneRenderer();
+      } else {
+        let pending = fallbackImages.length;
+        fallbackImages.forEach(image => {
+          const finish = () => {
+            pending -= 1;
+            if (!pending) startSceneRenderer();
+          };
+          if (image.complete) finish();
+          else {
+            image.addEventListener('load', finish, { once: true });
+            image.addEventListener('error', finish, { once: true });
+          }
+        });
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!scrollFrame) scrollFrame = requestAnimationFrame(() => {
+        latestWeights = updateSceneBlend();
+        scrollFrame = 0;
+      });
+    }, { passive: true });
+
+    beginSceneRenderer();
+  </script>
+</body>
+</html>
